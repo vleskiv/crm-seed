@@ -26,8 +26,8 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  # Run "vagrant plugin install vagrant-vbguest" for mounts with type: "virtualbox" (on the host OS)
-  config.vm.synced_folder "./interviewtasks", "/interviewtasks" , type: "virtualbox"
+  ### Run "vagrant plugin install vagrant-vbguest" for mounts with type: "virtualbox" (on the host OS)
+  config.vm.synced_folder ".", "/interviewtasks/crm-seed" , type: "virtualbox"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -39,5 +39,4 @@ Vagrant.configure("2") do |config|
   vb.memory = "1024"        # Customize the amount of memory on the VM
   end
   end
-  
   
