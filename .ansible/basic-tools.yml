@@ -1,0 +1,22 @@
+- hosts: localhost
+  tasks:
+
+
+  - name: Install EPEL repo.
+    package:
+       name={{item}} 
+       state=present
+    with_items:
+      - epel-release
+
+  - name: Install basic tools.
+    package:
+       name={{item}}
+       state=present
+    with_items:
+      - vim
+      - nano
+      - mc
+      - wget
+      - htop
+

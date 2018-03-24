@@ -1,0 +1,15 @@
+- hosts: localhost
+  tasks:
+
+  - name: NTP Install
+    yum:
+      name: ntp
+      state: present
+    register: ntp_installed
+
+  - name: NTP Enable and start service
+    service:
+      enabled: yes
+      name: ntpd
+      state: started
+    when: ntp_installed|succeeded
