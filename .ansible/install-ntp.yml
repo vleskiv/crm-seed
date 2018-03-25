@@ -2,12 +2,14 @@
   tasks:
 
   - name: NTP Install
+    become: true
     yum:
       name: ntp
       state: present
     register: ntp_installed
 
   - name: NTP Enable and start service
+    become: true
     service:
       enabled: yes
       name: ntpd
