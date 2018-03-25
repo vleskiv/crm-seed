@@ -40,8 +40,8 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   ### Run "vagrant plugin install vagrant-vbguest" for mounts with type: "virtualbox" (on the host OS)
-  ### config.vm.synced_folder ".", "/interviewtasks/crm-seed/" , type: "virtualbox"
-  # config.vm.synced_folder ".", "/interviewtasks/crm-seed/"
+  ### config.vm.synced_folder ".", PROJECT_FOLDER , type: "virtualbox"
+  # config.vm.synced_folder ".", PROJECT_FOLDER
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
