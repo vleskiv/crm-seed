@@ -64,7 +64,7 @@ $script = <<SCRIPT
 	echo "[install software] Done!"
 	echo "[update code] Begin..."
 	    ROOT_FOLDER=/interviewtasks/crm-seed
-		echo Root folder is $ROOT_FOLDER
+		echo Root folder is $ROOT_FOLDER/
 		if [ -d $ROOT_FOLDER/.git ];then echo "Code is present, nothing to do.";else echo "Code not found in" $ROOT_FOLDER/ "Begin downloading from github..." && sudo mkdir -p $ROOT_FOLDER/ && sudo chown -R vagrant:vagrant $ROOT_FOLDER/.. && rm -rf $ROOT_FOLDER/* && mkdir -p $ROOT_FOLDER/.git && cd $ROOT_FOLDER/ && git clone --bare https://github.com/vleskiv/crm-seed.git .git && git config --unset core.bare && git reset --hard && git checkout task2;fi
     echo "[update code] Done!"
 	
