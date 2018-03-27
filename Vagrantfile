@@ -65,12 +65,14 @@ $script = <<SCRIPT
 	echo "[update code] Begin..."
 	    ROOT_FOLDER=/interviewtasks/crm-seed
 		echo Root folder is $ROOT_FOLDER/
-		if [ -d $ROOT_FOLDER/.git ];then echo "Code is present, nothing to do.";else echo "Code not found in" $ROOT_FOLDER/ "Begin downloading from github..." && sudo mkdir -p $ROOT_FOLDER/ && sudo chown -R vagrant:vagrant $ROOT_FOLDER/.. && rm -rf $ROOT_FOLDER/* && mkdir -p $ROOT_FOLDER/.git && cd $ROOT_FOLDER/ && git clone --bare https://github.com/vleskiv/crm-seed.git .git && git config --unset core.bare && git reset --hard && git checkout task2;fi
-    echo "[update code] Done!"
+		if [ -d $ROOT_FOLDER/.git ];then echo "Code is present, nothing to do.";else echo "Code not found in" $ROOT_FOLDER/ "Begin downloading from github..." && sudo mkdir -p $ROOT_FOLDER/ && sudo chown -R vagrant:vagrant $ROOT_FOLDER/.. && rm -rf $ROOT_FOLDER/* && mkdir -p $ROOT_FOLDER/.git && cd $ROOT_FOLDER/ && git clone --bare https://github.com/vleskiv/crm-seed.git .git && git config --unset core.bare && git reset --hard && git checkout task2 && echo "[update code] Done!";
+		fi
+    
+		if [ -d $ROOT_FOLDER/.ansible ];
+		then echo "[run ansible] Let's play books..." && ansible-playbook $ROOT_FOLDER/.ansible/install-ntp.yml $ROOT_FOLDER/.ansible/install-basic-tools.yml $ROOT_FOLDER/.ansible/install-docker.yml $ROOT_FOLDER/.ansible/crm-up.yml && echo "[run ansible] Done!";
+		else echo $ROOT_FOLDER/.ansible not found;
+		fi
 	
-	echo "[run ansible] Let's play books..."
-			ansible-playbook $ROOT_FOLDER/.ansible/install-ntp.yml $ROOT_FOLDER/.ansible/install-basic-tools.yml $ROOT_FOLDER/.ansible/install-docker.yml $ROOT_FOLDER/.ansible/crm-up.yml
-	echo "[run ansible] Done!"
 	
 SCRIPT
   
