@@ -1,0 +1,7 @@
+- hosts: localhost
+  tasks:
+    - name: Docker - Down CRM
+      become: true
+      docker_service:
+        project_src: "{{ playbook_dir }}/../"
+        state: absent

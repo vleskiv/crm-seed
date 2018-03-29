@@ -1,0 +1,40 @@
+- hosts: localhost
+  tasks:
+
+  - name: NTP Install
+    become: true
+    yum:
+      name: ntp
+      state: present
+    register: ntp_installed
+
+  - name: NTP Enable and start service
+    become: true
+    service:
+      enabled: yes
+      name: ntpd
+      state: started
+    when: ntp_installed|succeeded
+  
+  - name: EPEL repo - Install.
+    become: true
+    package:
+       name={{item}} 
+       state=present
+    with_items:
+      - epel-release
+    register: epel_installed
+
+  - name: Basic tools - Install.
+    become: true
+    package:
+       name={{item}}
+       state=present
+    with_items:
+      - vim
+      - nano
+      - mc
+      - wget
+      - htop
+    when: epel_installed|succeeded
+

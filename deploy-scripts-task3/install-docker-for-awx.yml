@@ -1,0 +1,60 @@
+- hosts: localhost
+  tasks:
+
+  - name: Docker - Add repository gpg key
+    rpm_key:
+      key: https://download.docker.com/linux/centos/gpg
+      state: present
+
+  - name: Docker - Add repository
+    become: true
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+      force: yes
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Docker - Install
+    become: true
+    package:
+      name: docker-ce
+      state: present
+      update_cache: yes
+    register: docker_installed
+
+  - name: Docker - Enable and start service
+    become: true
+    service:
+      enabled: yes
+      name: docker
+      state: started
+    when: docker_installed|succeeded
+
+  - name: Python pip - Install.
+    become: true
+    package:
+       name={{item}}
+       state=present
+    with_items:
+      - python-pip
+    register: pip_installed
+
+  - name: Docker compose 1.9.0 - Install.
+    become: true
+    pip:
+       name={{item}}
+       state=present
+    with_items:
+      - docker-compose==1.9.0
+    when: pip_installed|succeeded
+    
+      - name: Docker compose 1.9.0 - Install.
+    become: true
+    pip:
+       name={{item}}
+       state=present
+    with_items:
+      - docker-py
+    when: pip_installed|succeeded
