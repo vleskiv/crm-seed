@@ -37,5 +37,6 @@
       - mc
       - wget
       - htop
+      - net-tools
     when: epel_installed is succeeded
 
