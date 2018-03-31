@@ -1,8 +1,10 @@
-- hosts: all
+- hosts: localhost
+  vars:
+    project_dir: /interviewtasks/crm-seed/
   tasks:
     - name: Docker - Up CRM
       become: true
       docker_service:
-        project_src: "{{ playbook_dir }}/../"
+        project_src: "{{ project_dir }}"
         state: present
 #       restarted: true ### Use with state present to restart all containers.
