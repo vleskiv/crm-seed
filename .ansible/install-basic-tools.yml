@@ -1,20 +1,32 @@
 - name: Setup basic tools
   hosts: localhost
   tasks:
-
+  
   - name: NTP Install
     become: true
     yum:
       name: ntp
       state: present
     register: ntp_installed
-
+  
   - name: NTP Enable and start service
     become: true
     service:
       enabled: yes
       name: ntpd
       state: started
+    when: ntp_installed is succeeded
+  
+  - name: NTP set timezone
+    become: true
+    file:
+      src: /usr/share/zoneinfo/Europe/Kiev
+      dest: /etc/localtime
+      owner: root
+      group: root
+      mode: 0666
+      state: link
+      force: yes
     when: ntp_installed is succeeded
   
   - name: EPEL repo - Install.
