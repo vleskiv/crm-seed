@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: all
   tasks:
 
   - name: Docker - Add repository gpg key
@@ -30,7 +30,7 @@
       enabled: yes
       name: docker
       state: started
-    when: docker_installed|succeeded
+    when: docker_installed is succeeded
 
   - name: Python pip - Install.
     become: true
@@ -48,13 +48,13 @@
        state=present
     with_items:
       - docker-compose==1.9.0
-    when: pip_installed|succeeded
-    
-      - name: Docker compose 1.9.0 - Install.
+    when: pip_installed is succeeded
+
+  - name: Docker-py module - Install.
     become: true
     pip:
        name={{item}}
        state=present
     with_items:
       - docker-py
-    when: pip_installed|succeeded
+    when: pip_installed is succeeded

@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+kk# -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 ### configuration parameters ###
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  # config.vm.network "public_network"
+  config.vm.network "public_network"
   
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   ### Run "vagrant plugin install vagrant-vbguest" for mounts with type: "virtualbox" (on the host OS)
   ### config.vm.synced_folder ".", PROJECT_FOLDER , type: "virtualbox"
-  # config.vm.synced_folder ".", PROJECT_FOLDER
+  ### config.vm.synced_folder ".", PROJECT_FOLDER
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -77,4 +77,3 @@ SCRIPT
   
   end
 
-  
