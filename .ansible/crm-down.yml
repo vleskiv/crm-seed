@@ -1,7 +1,9 @@
 - hosts: localhost
+  vars:
+    project_dir: /interviewtasks/crm-seed/
   tasks:
     - name: Docker - Down CRM
       become: true
       docker_service:
-        project_src: "{{ playbook_dir }}/../"
+        project_src: "{{ project_dir }}"
         state: absent

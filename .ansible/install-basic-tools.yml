@@ -1,7 +1,22 @@
-- hosts: localhost
+- name: Setup basic tools
+  hosts: localhost
   tasks:
 
+  - name: NTP Install
+    become: true
+    yum:
+      name: ntp
+      state: present
+    register: ntp_installed
 
+  - name: NTP Enable and start service
+    become: true
+    service:
+      enabled: yes
+      name: ntpd
+      state: started
+    when: ntp_installed is succeeded
+  
   - name: EPEL repo - Install.
     become: true
     package:
@@ -22,5 +37,5 @@
       - mc
       - wget
       - htop
-    when: epel_installed|succeeded
+    when: epel_installed is succeeded
 
