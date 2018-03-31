@@ -16,6 +16,18 @@
       name: ntpd
       state: started
     when: ntp_installed is succeeded
+    
+  - name: NTP set timezone
+    become: true
+    file:
+      src: /usr/share/zoneinfo/Europe/Kiev
+      dest: /etc/localtime
+      owner: root
+      group: root
+      mode: 0666
+      state: link
+      force: yes
+    when: ntp_installed is succeeded
   
   - name: EPEL repo - Install.
     become: true
