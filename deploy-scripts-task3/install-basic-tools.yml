@@ -1,4 +1,4 @@
-- name: Setup
+- name: Setup basic tools
   hosts: all
   tasks:
 

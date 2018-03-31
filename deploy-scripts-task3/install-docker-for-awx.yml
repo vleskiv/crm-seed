@@ -16,7 +16,7 @@
       group: root
       mode: 0644
 
-  - name: Docker - Install
+  - name: DockerCE latest - Install
     become: true
     package:
       name: docker-ce

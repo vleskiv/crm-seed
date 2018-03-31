@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: all
   vars:
     project_dir: /interviewtasks/crm-seed/
   tasks:

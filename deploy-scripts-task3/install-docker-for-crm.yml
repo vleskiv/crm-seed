@@ -1,4 +1,4 @@
-- hosts: localhost
+- hosts: all
   tasks:
 
   - name: Docker - Add repository gpg key
@@ -16,10 +16,10 @@
       group: root
       mode: 0644
 
-  - name: Docker - Install
+  - name: DockerCE v17.09 - Install
     become: true
     package:
-      name: docker-ce
+      name: docker-ce-17.09.1.ce-1.el7.centos
       state: present
       update_cache: yes
     register: docker_installed
