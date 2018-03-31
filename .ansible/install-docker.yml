@@ -30,7 +30,7 @@
       enabled: yes
       name: docker
       state: started
-    when: docker_installed|succeeded
+    when: docker_installed is succeeded
 
   - name: Python pip - Install.
     become: true
@@ -48,4 +48,4 @@
        state=present
     with_items:
       - docker-compose
-    when: pip_installed|succeeded
+    when: pip_installed is succeeded
