@@ -1,0 +1,69 @@
+Requirements:
+- Latest Virtual Vox and Vagrant
+- For virtual machine: 4GB RAM; min 20 GB hard disk; 64-bit support 
+- Supported OS: Red Hat Enterprise Linux 6 or 7 64-bit, CentOS 6 or 7 64-bit, Ubuntu 12.04 or 14.04 LTS 64-bit
+- docker-compose version 1.9.0 is required (not higher)
+
+You can use this playbook to install docker-environment for Ansible AWX: 
+https://github.com/vleskiv/ansible-playbooks/blob/master/install-docker-for-awx.yml
+
+1) Install and configure Ansible AWX.
+
+Use "Vagrantfile" in folder with this instruction to start virtual machine.
+After start VM check internet connection and install required tools:
+sudo yum -y install ansible git wget
+mkdir -p ~/install/playbooks/ && cd ~/install/playbooks/
+wget https://raw.githubusercontent.com/vleskiv/ansible-playbooks/master/install-docker-for-awx.yml
+sudo ansible-playbook install-docker-for-awx.yml
+mkdir -p ~/install/awx/ && cd ~/install/awx/
+git clone https://github.com/ansible/awx.git ~/install/awx/
+sudo ansible-playbook -i ~/install/awx/installer/inventory ~/install/awx/installer/install.yml
+
+Open http://127.0.0.1:8080/ in your local browser.
+Default login:
+admin
+Default password:
+password
+
+2) Configure AWX to be able to run created on Task-2 yours ansible playbooks from AWX Web interface. 
+Remove defaults:
+INVENTORIES > on "Demo inventory" press Delete inventory
+ORGANIZATIONS > on "Default" organisation press Delete
+CREDENTIALS > on "Demo Credential" press Delete credential
+TEMPLATES > on "Demo Job Template" press Delete
+
+Create new
+ORGANIZATIONS > ADD > Name: "Task3 organization" > Save
+INVENTORIES > ADD > Inventory > NAME: "Task3 inventory"; ORGANIZATION: "Task3 organization" > Save
+INVENTORIES > choose Task3 inventory > HOSTS > ADD HOST > enter IP of target host, where we need to run playbooks
+CREDENTIALS > ADD > NAME: "Task3 Credential"; ORGANIZATION: "Task3 organization"; CREDENTIAL TYPE: "Machine"; User Name: "vagrant"
+SSH PRIVATE KEY: copy text from folder with Vagrantfile: .vagrant\machines\default\virtualbox\private_key
+PRIVILEGE ESCALATION METHOD: choose "sudo" > SAVE
+
+PROJECTS > ADD > NAME: "Task3 project"; ORGANIZATION: "Task3 organization"; SCM TYPE: "Git"; SCM URL: "https://github.com/vleskiv/crm-seed.git"; SCM BRANCH/TAG/COMMIT: "task3"; choose "Update Revision on Launch" > SAVE
+
+TEMPLATES > ADD > Job template > NAME: "Task3 install basic tools"; JOB TYPE: "Run"; INVENTORY: "Task3 inventory"; PROJECT: "Task3 project"; PLAYBOOK: "install-basic-tools.yml" CREDENTIALS: "Task3 Credential"; VERBOSITY: "0 (Normal)"; choose "Enable Privilege Escalation" > SAVE
+TEMPLATES > ADD > NAME: "Task3 install docker for crm"; DESKRIPTION: "DockerCE v17.09" JOB TYPE: "Run"; INVENTORY: "Task3 inventory"; PROJECT: "Task3 project"; PLAYBOOK: "install-docker-for-crm.yml" CREDENTIALS: "Task3 Credential"; VERBOSITY: "0 (Normal)"; choose "Enable Privilege Escalation" > SAVE
+TEMPLATES > ADD > NAME: "Task3 crm up"; JOB TYPE: "Run"; INVENTORY: "Task3 inventory"; PROJECT: "Task3 project"; PLAYBOOK: "crm-up.yml" CREDENTIALS: "Task3 Credential"; VERBOSITY: "0 (Normal)"; choose "Enable Privilege Escalation" > SAVE
+TEMPLATES > ADD > NAME: "Task3 crm down"; JOB TYPE: "Run"; INVENTORY: "Task3 inventory"; PROJECT: "Task3 project"; PLAYBOOK: "crm-down.yml" CREDENTIALS: "Task3 Credential"; VERBOSITY: "0 (Normal)"; choose "Enable Privilege Escalation" > SAVE
+
+TEMPLATES > ADD > Workflow Template > NAME: "Deploy project CRM"; ORGANIZATION: "Task3 organization"; > SAVE
+TEMPLATES > choose "Deploy project CRM" > WORKFLOW EDITOR > press START > choose "Task3 install basic tools" > RUN "Always" > SELECT
+choose "Task3 install basic tools" > "+" >  choose "Task3 install docker for crm" > RUN "On Success" > SELECT
+choose "Task3 install docker for crm" >  "+" > choose "Task3 crm up" > RUN "On Success" > SELECT
+As result you have next Workflow - https://i.imgur.com/Hwz4UKc.png
+press SAVE
+
+3) Make sure, that target host, where we need to run playbooks is running and accesible over ssh (from AnsibleAWX server).
+Need to configure network connectivity from AWX to target host OS. This step is not described in this manual, because it depends on the settings of your network.
+
+4) Go to TEMPLATES > on the "Deploy project CRM" press Run (rocket icon)
+
+5) When job finished - go to host with target virtual machine and open http://127.0.0.1:8080/ in local browser
+
+
+
+
+
+
+
